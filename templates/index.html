@@ -1,0 +1,39 @@
+<!--
+ * @Author: ShAn_3003
+ * @Date: 2024-01-05 16:15:32
+ * @LastEditTime: 2024-01-05 16:47:22
+ * @LastEditors: ShAn_3003
+ * @Description: 这是web端入口的界面设计
+ * @FilePath: \ForecastSecondHandHouse\templates\index.html
+-->
+<html>
+    <head>
+        <meta charset = 'utf-8'>
+        <title>链家网——二手房价格预测</title>
+        <style>
+            h1{
+                text-align: center;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>
+            标题一
+        </h1>
+        <form   action="/process" method="post">
+            <label for="province_code">选择省份代号：</label>
+            <input type="text" id="province_code" name="province_code" required>
+            <button type="submit">提交</button>
+        </form>
+        <ul>
+            {% for key,value in provinces.items() %}
+                <li>
+                    <div>
+                        {{key}}----{{value}}
+                    </div>
+                </li>
+            {% end %}
+        </ul>
+    </body>
+</html>

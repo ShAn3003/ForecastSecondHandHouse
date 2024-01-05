@@ -75,46 +75,6 @@ def get_page(data):
     return int(str(page.group(1)))  # 以int类型返回，直接用在循环中
 
 
-def save_png(png_url, title):
-    """
-    向图片链接发起请求，保存图片
-    :param png_url: 图片链接
-    :param title: 二手房标题，作为图片的命名
-    :return: null
-    """
-    name = str(title.string)
-    # 图片命名不能有以下字符，所以要将这些字符去除
-    if '*' in name:
-        name = name.replace('*', '')
-    if '\\' in name:
-        name = name.replace('\\', '')
-    if '/' in name:
-        name = name.replace('/', '')
-    if ':' in name:
-        name = name.replace(':', '')
-    if '?' in name:
-        name = name.replace('?', '')
-    if '"' in name:
-        name = name.replace('"', '')
-    if '<' in name:
-        name = name.replace('<', '')
-    if '>' in name:
-        name = name.replace('>', '')
-    if '|' in name:
-        name = name.replace('|', '')
-    # 创建保存图片的文件夹
-    if not os.path.exists('{}png'.format(citys[city_ind])):
-        os.makedirs('{}png'.format(citys[city_ind]))
-    else:
-        # 尝试向图片发起请求，因有些网站中出现图片拍摄中的情况，这样写避免程序终止
-        try:
-            png_data = requests.get(png_url, headers).content
-            with open('{}png/'.format(citys[city_ind]) + name + '.jpg', 'wb') as f:
-                f.write(png_data)
-        except:
-            print('爬取图片错误，错误位置：', name)
-
-
 def get_model(infor):
     """
     从一次解析得到的文本中二次解析得到房屋户型信息
@@ -253,30 +213,28 @@ def save_data(all_data):
     all_data = pd.DataFrame(all_data)
     all_data.to_excel('./data.xlsx', sheet_name='数据', index=False, engine='openpyxl')
 
-
-
-# 主函数
-if __name__ == '__main__':
-    
-    # 一级页面
-    city_url = 'https://www.lianjia.com/city/'
-    headers = {  # 请求头
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36'
-    }
-    city_data = get_data(city_url, headers)
+def get_provinces():
     provinces = analyse_province(city_data)
-    print(provinces)
-    index = int(input('请选择省份：'))  # 用户选择省份
-    citys, urls = analyse_city(city_data, index)
-    print(citys)
-    city_ind = int(input('请选择城市：'))  # 用户选择城市
+    return provinces
+# 一级页面
+city_url = 'https://www.lianjia.com/city/'
+headers = {  # 请求头
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36'
+}
+city_data = get_data(city_url, headers)
+urls=None
+def get_city(index):
+    global urls
+    citys, urls= analyse_city(city_data, index)
+    return citys
+def craw_data(city_idx):
     # 总数据集，保存的依次为地址、户型、面积、单价、总价、关注度、发布时间
     all_data = [[], [], [], [], [], [], [], []]
-    page = get_page(get_data(urls[city_ind].format(1), headers))
+    page = get_page(get_data(urls[city_idx].format(1), headers))
     # 爬取多页
     print(f"正在从{city_url}爬取二手房信息：")
     for pn in tqdm(range(1, page)):
-        href = urls[city_ind].format(pn)
+        href = urls[city_idx].format(pn)
         # 程序暂停2秒，避免爬取过快而被封IP
         time.sleep(1)
         # print('正在爬取第{}页'.format(pn))
