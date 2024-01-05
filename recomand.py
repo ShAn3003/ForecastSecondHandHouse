@@ -1,7 +1,7 @@
 '''
 Author: ShAn_3003
 Date: 2024-01-05 12:55:42
-LastEditTime: 2024-01-05 13:05:02
+LastEditTime: 2024-01-05 21:39:39
 LastEditors: ShAn_3003
 Description: 
 FilePath: \ForecastSecondHandHouse\recomand.py
@@ -9,7 +9,7 @@ FilePath: \ForecastSecondHandHouse\recomand.py
 import pandas as pd
 
 
-def recomand(rooms,areas,data):
+def recomand(rooms,areas,data='data.xlsx'):
     
 
     xls = pd.read_excel(data,header=1)
@@ -24,11 +24,14 @@ def recomand(rooms,areas,data):
     ]
 
     # 获取前十条数据
-    result = selected_data.head(10)
+    result = selected_data.head(10).to_dict(orient='records')
     return result
 
 if __name__ == "__main__":
     rooms = 3
     areas = 150
-    
-    print(recomand(rooms,areas,"data.xlsx"))
+    result=recomand(rooms,areas,'data.xlsx')
+    print(result)
+
+
+

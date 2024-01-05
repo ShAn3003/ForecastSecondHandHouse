@@ -21,7 +21,7 @@ def preprocess(xls):
     xls['面积'] = xls['面积'].str.extract('(\d+).?\d*').astype(float)
     features = xls[['房间数','面积','单价']]
     return features
-if __name__=="__main__":
+def analyse():
     xls = read_data("data.xlsx")
     features =  preprocess(xls)
     features.to_csv('features.csv',index=False)

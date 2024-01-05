@@ -1,7 +1,7 @@
 '''
 Author: ShAn_3003
 Date: 2024-01-05 12:21:41
-LastEditTime: 2024-01-05 12:52:27
+LastEditTime: 2024-01-05 18:27:26
 LastEditors: ShAn_3003
 Description: 
 FilePath: \ForecastSecondHandHouse\linearmodel.py
@@ -31,16 +31,16 @@ def train_model(rooms,data):
 
     return model
 
-def predict(area,model):
+def model_predict(area,model):
     return model.predict(area)
 
-if __name__ == "__main__":
-    rooms = int(input("请输入房间数："))
+def predict(rooms,areas):
     print("正在生成线性回归拟合结果......")
+    print(type(rooms),type(areas))
     model = train_model(rooms,"features.csv")
-    areas = float(input("请输入面积："))
     areas = np.array([areas]).reshape(-1, 1)    
-    price = predict(areas,model)
+    price = model_predict(areas,model)
     print(f"{rooms}室-{areas[0][0]}平方米的预测单位面积价格是：{price[0]}")
+    return price[0]
 
 
