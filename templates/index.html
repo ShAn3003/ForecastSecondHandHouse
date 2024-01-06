@@ -1,7 +1,7 @@
 <!--
  * @Author: ShAn_3003
  * @Date: 2024-01-05 16:15:32
- * @LastEditTime: 2024-01-05 16:47:22
+ * @LastEditTime: 2024-01-06 11:17:23
  * @LastEditors: ShAn_3003
  * @Description: 这是web端入口的界面设计
  * @FilePath: \ForecastSecondHandHouse\templates\index.html
@@ -15,25 +15,89 @@
                 text-align: center;
                 font-family: Arial, Helvetica, sans-serif;
             }
+            h2{
+                text-align: center;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+            form {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin-bottom: 20px;
+            }
+
+            label {
+                margin-bottom: 10px;
+            }
+
+            input {
+                padding: 8px;
+                margin-bottom: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                width: 200px;
+            }
+
+            button {
+                padding: 10px;
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+            button:hover {
+                background-color: #45a049;
+            }
+            .progress-text {
+                font-size: 16px;
+                color: #333;
+                margin-bottom: 10px;
+            }
+
+            .province-city {
+                font-weight: bold;
+                color: #007BFF;
+            }
+
+            .estimated-time {
+                font-style: italic;
+                color: #28A745;
+            }
         </style>
     </head>
     <body>
-        <h1>
-            标题一
-        </h1>
-        <form   action="/process" method="post">
+        
+        <h1>请选择需要查找的省份</h1>
+        <form action="/process" method="post">
             <label for="province_code">选择省份代号：</label>
             <input type="text" id="province_code" name="province_code" required>
             <button type="submit">提交</button>
         </form>
-        <ul>
-            {% for key,value in provinces.items() %}
-                <li>
-                    <div>
-                        {{key}}----{{value}}
-                    </div>
-                </li>
+        <div style="display: flex; flex-wrap: wrap;">
+            {% for key, value in shan.provinces.items() %}
+                <div style="margin: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                    {{ key }} - {{ value }}
+                </div>
             {% end %}
-        </ul>
+        </div>
+        <hr>
+        {% if shan.citys %}
+            <h2>请选择需要查找的城市</h2>
+            <form action="/craw" method="post">
+                <label for="city_idx">选择省份代号：</label>
+                <input type="text" id="city_idx" name="city_idx" required>
+                <button type="submit">提交</button>
+            </form>
+            <div style="display: flex; flex-wrap: wrap;">
+                {% for key, value in shan.citys.items() %}
+                    <div style="margin: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                        {{ key }} - {{ value }}
+                    </div>
+                {% end %}
+            </div>
+        {% end %}
+        
     </body>
 </html>

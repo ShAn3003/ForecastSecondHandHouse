@@ -1,8 +1,96 @@
+<!--
+ * @Author: ShAn_3003
+ * @Date: 2024-01-05 17:50:19
+ * @LastEditTime: 2024-01-06 11:33:36
+ * @LastEditors: ShAn_3003
+ * @Description: 这部分是预测的内容
+ * @FilePath: \ForecastSecondHandHouse\templates\predict.html
+-->
 <html>
     <head>
+        <style>
+            h1{
+                text-align: center;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+            h2{
+                text-align: center;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+            .result-container {
+                background-color: #f4f4f4;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                padding: 15px;
+                margin-top: 20px;
+            }
 
+            .result-label {
+                font-weight: bold;
+                margin-bottom: 5px;
+            }
+
+            .result-value {
+                margin-bottom: 10px;
+            }
+            form {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin-bottom: 20px;
+            }
+
+            label {
+                margin-bottom: 10px;
+            }
+
+            input {
+                padding: 8px;
+                margin-bottom: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                width: 200px;
+            }
+
+            button {
+                padding: 10px;
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+            button:hover {
+                background-color: #45a049;
+            }
+            .progress-text {
+                font-size: 16px;
+                color: #333;
+                margin-bottom: 10px;
+            }
+
+            .province-city {
+                font-weight: bold;
+                color: #007BFF;
+            }
+
+            .estimated-time {
+                font-style: italic;
+                color: #28A745;
+            }
+        </style>
     </head>
     <body>
+        <h1>
+            预测二手房价格
+        </h1>
+        {% if shan.craw %}
+            <p class="progress-text">
+                正在努力爬取<span class="province-city">{{ shan.provinces[shan.province_code] }}-{{ shan.citys[shan.city_idx] }}</span>的二手房数据
+                预计需要 <span class="estimated-time">5分钟</span>
+            </p>
+        {% end %}
         <form action="/analyse" method="post">
             <label for="Rooms">输入房间数</label>
             <input type="text" id="Rooms" name="Rooms" required>
@@ -12,13 +100,29 @@
     
             <button type="submit">提交</button>
         </form>
-        <p>
-            当前你选择的房间数为{{rooms}}--面积为{{areas}}
-            预测单位面积的价格为{{price}}
-        </p>
-        {% if recommand %}
-            {% for item in recommand %}
-            <p>{{item}}</p>
+        <hr>
+        <div class="result-container">
+            <p class="result-label">当前你选择的房间数为</p>
+            <p class="result-value">{{ shan.rooms }}</p>
+            
+            <p class="result-label">面积为</p>
+            <p class="result-value">{{ shan.areas }}</p>
+            
+            <p class="result-label">预测单位面积的价格为</p>
+            <p class="result-value">{{ shan.price }}</p>
+        </div>
+        <hr>
+        
+        {% if shan.recommand %}
+            <h1>相关推荐列表</h1>
+            {% for item in shan.recommand %}
+                <div style="border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin-bottom: 10px;">
+                    <p><strong>地址：</strong>{{ item['地址']}}</p>
+                    <p><strong>户型：</strong>{{ item["户型"]}}</p>
+                    <p><strong>单价：</strong>{{ item["单价"] }}</p>
+                    <p><strong>面积：</strong>{{ item["面积"]}}</p>
+                    <p><strong>链接：</strong><a href="{{ item["链接"] }}" target="_blank">{{ item["链接"] }}</a></p>
+                </div>
             {% end %}
         {% end %}
     </body>

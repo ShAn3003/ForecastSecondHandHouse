@@ -241,9 +241,6 @@ def craw_data(city_idx):
         two_hand_data = get_data(href, headers)
         information = analyse_house(two_hand_data)
         all_data = merge_data(all_data, information)
-    # max_follow_unitprice, max_follow_price = get_max(all_data)
-    # print('关注度最高的单价：', max_follow_unitprice, '元/平')
-    # print('关注度最高的房屋总价：', max_follow_price, '万元')
     print('数据量：', len(all_data[0]))
     save_data(all_data)
-    # draw_picture(all_data, citys[city_ind])
+    

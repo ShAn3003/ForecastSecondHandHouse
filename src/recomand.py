@@ -31,7 +31,9 @@ if __name__ == "__main__":
     rooms = 3
     areas = 150
     result=recomand(rooms,areas,'data.xlsx')
-    print(result)
+    for item in result:
+        print(item['地址'])
+        
 
 
 
